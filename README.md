@@ -1,16 +1,16 @@
-# Budget Calculator
+# Expense Tracker
 
 ## Description
 
-This is a Budget Calculator web application built using Html,CSS and ReactJS.I made this simple web application to practice React concepts.
+This is an Expense Tracker web application built using Html,CSS and ReactJS. I made this simple web application to practice React concepts. It also stores the data in local storage. It facilitates the user to enter his/her Income,calculate his/her Expenses and the total remaining balance. I have referred to Traversy Media's tutorial on Youtube. [Tutorial Link.](https://www.youtube.com/watch?v=XuFDcZABiDQ)
 
 ## Demo
 
-Link 👉 To be added.
+👉 [Link](https://brave-khorana-45dd33.netlify.app/)
 
 ## Screenshot
 
-To be added.
+![screenshot](https://user-images.githubusercontent.com/4997491/102491490-47defc00-4096-11eb-836c-4614a181f9b0.JPG)
 
 ## Installation
 
