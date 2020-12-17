@@ -87,7 +87,7 @@ const App = () => {
           />
         </div>
 
-        <button className="btn">Add Expenses</button>
+        <button className="btn">Add Expense</button>
       </form>
       <div className="list">
         {list.map((item, id) => {
