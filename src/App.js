@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Header from "./Header";
 import { v4 as uuidv4 } from "uuid";
+import getSymbolFromCurrency from 'currency-symbol-map';
 import "./App.css";
 
 const arr = () => {
@@ -9,13 +10,34 @@ const arr = () => {
   else return [];
 };
 
+const BASE_URL = "https://api.exchangeratesapi.io/latest";
+
 const App = () => {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState(0);
   const [income, setIncome] = useState(0);
-
+const [code, setCode] = useState();
   const [list, setList] = useState(arr);
+   const [currencyOptions, setCurrencyOptions] = useState([]);
+ const [fromCurrency, setFromCurrency] = useState("EUR");
 
+useEffect(() => {
+    fetch(BASE_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        
+        setCode("$");
+        setCurrencyOptions([data.base, ...Object.keys(data.rates)]);
+
+       
+       const code=getSymbolFromCurrency(fromCurrency);
+      setCode(code);
+
+      });
+  }, [fromCurrency]);
+
+
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newItem = {
@@ -25,7 +47,7 @@ const App = () => {
     };
     if (name && amount) {
       setList([...list, newItem]);
-      console.log(list);
+     
       setName("");
       setAmount(0);
     }
@@ -47,17 +69,32 @@ const App = () => {
 
   return (
     <div>
-      <Header />
+      <Header /><br></br>
+      <div style={{display:"flex",justifyContent:"center"}}>
+      <h4>Currency:</h4>
+      <select
+        className="select"
+        value={fromCurrency}
+        onChange={(e) => setFromCurrency(e.target.value)}
+      >
+        {currencyOptions.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+      </div>
       <div className="inc-exp-container">
         <div>
           <h4>Income</h4>
-          <p className="money plus">${income}</p>
+          <p className="money plus">{code}{income}</p>
         </div>
         <div>
           <h4>Expense</h4>
-          <p className="money minus">${total}</p>
+          <p className="money minus">{code}{total}</p>
         </div>
       </div>
+      <h4>Total Monthly Income:</h4>
       <input
         type="text"
         placeholder="Enter Your Income"
@@ -65,7 +102,7 @@ const App = () => {
         onChange={(e) => setIncome(e.target.value)}
       />
       <br></br>
-      <h4>Total Balance:${income - total}</h4>
+      <h4>Total Balance:{code}{income - total}</h4>
       <form onSubmit={handleSubmit}>
         <div className="form-control">
           <label htmlFor="text">Item</label>
@@ -73,7 +110,10 @@ const App = () => {
             type="text"
             placeholder="Enter Item"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              if(e.target.value.length<=15)
+              setName(e.target.value)
+            }}
           />
         </div>
         <div className="form-control">
@@ -83,7 +123,10 @@ const App = () => {
           <input
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => {
+              if(e.target.value.length<=10)
+              setAmount(e.target.value)
+            }}
           />
         </div>
 
@@ -93,8 +136,9 @@ const App = () => {
         {list.map((item, id) => {
           return (
             <div key={id}>
-              <li className="plus">
-                {item.name} <span>${Math.abs(item.amount)}</span>
+              <li className={item.amount>0 ? "plus": "minus"}>
+                {item.name}
+                <span>{code}{(item.amount)}</span>
                 <button
                   onClick={() => deleteItem(item.id)}
                   className="delete-btn"
