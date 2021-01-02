@@ -132,7 +132,14 @@ input[type='number'] {
 .list li.minus {
   border-right: 5px solid #c0392b;
 }
+select {
+  margin-left: .5rem;
+}
 
+.select{
+  background-color:indigo;
+  color:#fff;
+}
 .delete-btn {
   cursor: pointer;
   background-color: #e74c3c;
